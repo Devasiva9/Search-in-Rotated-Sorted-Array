@@ -1,0 +1,62 @@
+The code provided is a Java solution for searching a target element in a rotated sorted array using binary search. The logic involves identifying the sorted half of the array and then adjusting the search range accordingly.
+
+Here's a breakdown of how it works:
+
+1. **Initialization:**
+   - `left` is initialized to 0 (the start of the array).
+   - `right` is initialized to `nums.length - 1` (the end of the array).
+
+2. **Binary Search Loop:**
+   - The loop runs as long as `left` is less than or equal to `right`.
+   - `mid` is calculated as the midpoint of `left` and `right`.
+
+3. **Check for Target:**
+   - If `nums[mid]` equals the target, `mid` is returned as the index of the target.
+
+4. **Identify Sorted Half:**
+   - If `nums[mid] >= nums[left]`, it indicates that the left half of the array is sorted.
+     - Check if the target lies within this sorted left half (`nums[left] <= target && target <= nums[mid]`).
+     - If yes, move `right` to `mid - 1` to search in the left half.
+     - Otherwise, move `left` to `mid + 1` to search in the right half.
+   - If `nums[mid] < nums[left]`, it indicates that the right half of the array is sorted.
+     - Check if the target lies within this sorted right half (`nums[mid] <= target && target <= nums[right]`).
+     - If yes, move `left` to `mid + 1` to search in the right half.
+     - Otherwise, move `right` to `mid - 1` to search in the left half.
+
+5. **Return -1 if Not Found:**
+   - If the loop exits without finding the target, `-1` is returned.
+
+Here is the same code with added comments for clarity:
+
+```java
+class Solution {
+    public int search(int[] nums, int target) {
+        int left = 0;
+        int right = nums.length - 1;
+
+        while (left <= right) {
+            int mid = (left + right) / 2;
+
+            if (nums[mid] == target) {
+                return mid;
+            } else if (nums[mid] >= nums[left]) {  // Left half is sorted
+                if (nums[left] <= target && target <= nums[mid]) {  // Target in left half
+                    right = mid - 1;
+                } else {  // Target in right half
+                    left = mid + 1;
+                }
+            } else {  // Right half is sorted
+                if (nums[mid] <= target && target <= nums[right]) {  // Target in right half
+                    left = mid + 1;
+                } else {  // Target in left half
+                    right = mid - 1;
+                }
+            }
+        }
+
+        return -1;  // Target not found
+    }
+}
+```
+
+This approach efficiently narrows down the search space by leveraging the properties of the rotated sorted array and has a time complexity of \(O(\log n)\).
